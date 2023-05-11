@@ -1,4 +1,8 @@
-import fetchData from "../../../stuff/apiCalls";
+import {fetchData, fetchDataAxios} from "../../../stuff/apiCalls";
+
+/**
+ * Allgemeine Idee: mockResolvedValue wird die Rueckgabe einer Methode ueberschreiben
+ */
 
 test('fetchData returns the correct data', async () => {
 
@@ -16,25 +20,30 @@ test('fetchData returns the correct data', async () => {
 
   const data = await fetchData();
   expect(data).toEqual(mockData);
+
+  //mach das shadowing rueckgaengig
+  global.fetch.mockRestore();
 });
 
 
 
-/*
+
 //axios kriege ich nicht gemockt ey
-//  SyntaxError: Cannot use import statement outside a module
+// - ja du musst     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!axios)/'", - damit er halt axios mitimportieren kann und nicht aus nodeModules ignored
 
 import axios from 'axios';
 
 jest.mock('axios');
 
-test('fetchData returns the correct data', async () => {
+test('axios returns the correct data', async () => {
   const data = { some: 'data' };
+  //get wird immer das hier returnen
   axios.get.mockResolvedValue({ data });
 
-  const result = await fetchData();
+  const result = await fetchDataAxios();
 
   expect(result).toEqual(data);
-});
 
-*/
+  //mach das shadowing rueckgaengig
+  axios.get.mockRestore();
+});
