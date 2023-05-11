@@ -1,16 +1,40 @@
-// users.test.js
+import fetchData from "../../../stuff/apiCalls";
 
-import { getUsers } from "../../../stuff/apiCalls";
+test('fetchData returns the correct data', async () => {
 
+  const mockData = { foo: 'bar' };
 
-/*Du kannst beliebige Funktionen hier shadowen! - 
-der erste parameter ist wo es importiert wird, der zweite Parameter halt
- eine Anonyme funktion, wo du dann drin mit jest.fn() die Funktionen uebrschreibst */
-jest.mock('../../../stuff/apiCalls', () => ({
-  getUsers: jest.fn(() => Promise.resolve([{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }])),
-}));
+  const mockResponse = {
+    ok: true,
+    json: () => Promise.resolve(mockData),
+  };
 
-test('getUsers returns a list of users', async () => {
-  const users = await getUsers();
-  expect(users).toStrictEqual([{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]);
+  /*du kannst Fetch so mocken - jeder Aufruf von sfetch wird das zureuckgeben was resolvedValue gibt
+  das wird den Aufruf von fetch in fetchData manipulieren
+  */
+  jest.spyOn(global, 'fetch').mockResolvedValue(mockResponse);
+
+  const data = await fetchData();
+  expect(data).toEqual(mockData);
 });
+
+
+
+/*
+//axios kriege ich nicht gemockt ey
+//  SyntaxError: Cannot use import statement outside a module
+
+import axios from 'axios';
+
+jest.mock('axios');
+
+test('fetchData returns the correct data', async () => {
+  const data = { some: 'data' };
+  axios.get.mockResolvedValue({ data });
+
+  const result = await fetchData();
+
+  expect(result).toEqual(data);
+});
+
+*/

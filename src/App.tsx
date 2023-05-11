@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import fetchData from './stuff/apiCalls';
 
 function App() {
+
+  const fetchDataFunction = fetchData;
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    //fetchDataFunction().then(response => setData(response)).finally(() => console.log(data));
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">

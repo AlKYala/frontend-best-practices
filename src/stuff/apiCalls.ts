@@ -1,5 +1,6 @@
-// apiClient.js - tun wir mal so als ga
-export async function getUsers() {
-    const response = await fetch('/api/users');
-    return response.json();
-  }
+
+export default async function fetchData() {
+  const response = await fetch('https://api.example.com/data');
+  const data = await response.json();
+  return data;
+}
